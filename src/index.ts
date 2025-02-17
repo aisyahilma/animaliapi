@@ -1,9 +1,24 @@
-import { Hono } from 'hono'
+import { Hono } from "hono";
 
-const app = new Hono()
+const app = new Hono();
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+const animals = [
+  { id: 1, name: "Aardvark" },
+  { id: 2, name: "Bear" },
+  { id: 3, name: "Cat" },
+  { id: 4, name: "Dog" },
+  { id: 5, name: "Elephant" },
+  { id: 6, name: "Flamingo" },
+];
 
-export default app
+app.get("/", (c) => {
+  return c.json({
+    message: "Hello World",
+  });
+});
+
+app.get("/animals", (c) => {
+  return c.json(animals);
+});
+
+export default app;
