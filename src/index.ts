@@ -13,12 +13,24 @@ const animals = [
 
 app.get("/", (c) => {
   return c.json({
-    message: "Hello World",
+    message: "Animali API",
   });
 });
 
 app.get("/animals", (c) => {
   return c.json(animals);
+});
+
+app.get("/animals/:id", (c) => {
+  const id = Number(c.req.param("id"));
+
+  const animal = animals.find((animal) => animal.id === id);
+
+  if (!animal) {
+    return c.json({ message: "Animal not found" }, 404);
+  }
+
+  return c.json(animal);
 });
 
 export default app;
