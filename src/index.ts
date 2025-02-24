@@ -17,10 +17,12 @@ app.get("/", (c) => {
   });
 });
 
+// GET /animals
 app.get("/animals", (c) => {
   return c.json(animals);
 });
 
+// GET /animals/:id
 app.get("/animals/:id", (c) => {
   const id = Number(c.req.param("id"));
 
@@ -32,5 +34,11 @@ app.get("/animals/:id", (c) => {
 
   return c.json(animal);
 });
+
+// POST /animals
+
+// DELETE /animals/:id
+
+// PATCH /animals/:id
 
 export default app;
