@@ -37,11 +37,15 @@ app.get("/animals/:id", async (c) => {
 
 // POST /animals
 app.post("/animals", async (c) => {
-  const newAnimal = await c.req.json();
+  const animalJSON = await c.req.json();
 
   // TODO: Use Prisma
 
-  return c.json(null, 201);
+  const newAnimal = await prisma.animal.create({
+    data: animalJSON,
+  });
+
+  return c.json(newAnimal, 201);
 });
 
 // DELETE /animals/:id
