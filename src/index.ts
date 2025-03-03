@@ -2,7 +2,7 @@ import { Hono } from "hono";
 
 const app = new Hono();
 
-const animals = [
+let animals = [
   { id: 1, name: "Aardvark" },
   { id: 2, name: "Bear" },
   { id: 3, name: "Cat" },
@@ -67,10 +67,18 @@ app.patch("/animals/:id", async (c) => {
     return c.json({ message: "Animal not found" }, 404);
   }
 
-  const updatedData = await c.req.json();
-  animal.name = updatedData.name || animal.name; // Update name if provided
+  const animalToUpdate = await c.req.json();
 
-  return c.json(animal);
+  const updatedAnimals = animals.map((animal) => {
+    if (animal.id === id) {
+      return { ...animal, ...animalToUpdate };
+    }
+    return animal;
+  });
+
+  animals = updatedAnimals;
+
+  return c.json({ message: "Animal updated" });
 });
 
 export default app;
