@@ -1,5 +1,7 @@
 # Animali API
 
+Reference: https://github.com/mhaidarhanif/animalia-7
+
 ## REST API Specification
 
 | Ednpoint     | HTTP Method | Description      |

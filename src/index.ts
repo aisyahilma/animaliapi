@@ -1,15 +1,9 @@
 import { Hono } from "hono";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 const app = new Hono();
-
-const animals = [
-  { id: 1, name: "Aardvark" },
-  { id: 2, name: "Bear" },
-  { id: 3, name: "Cat" },
-  { id: 4, name: "Dog" },
-  { id: 5, name: "Elephant" },
-  { id: 6, name: "Flamingo" },
-];
 
 app.get("/", (c) => {
   return c.json({
@@ -18,15 +12,21 @@ app.get("/", (c) => {
 });
 
 // GET /animals
-app.get("/animals", (c) => {
+app.get("/animals", async (c) => {
+  const animals = await prisma.animal.findMany();
+
   return c.json(animals);
 });
 
 // GET /animals/:id
-app.get("/animals/:id", (c) => {
+app.get("/animals/:id", async (c) => {
   const id = Number(c.req.param("id"));
 
-  const animal = animals.find((animal) => animal.id === id);
+  const animal = await prisma.animal.findUnique({
+    where: {
+      id,
+    },
+  });
 
   if (!animal) {
     return c.json({ message: "Animal not found" }, 404);
@@ -37,40 +37,33 @@ app.get("/animals/:id", (c) => {
 
 // POST /animals
 app.post("/animals", async (c) => {
-  const newAnimal = await c.req.json();
-  const newId = animals.length ? animals[animals.length - 1].id + 1 : 1; // Generate new ID
-  const animalToAdd = { id: newId, name: newAnimal.name };
+  const animalJSON = await c.req.json();
 
-  animals.push(animalToAdd);
-  return c.json(animalToAdd, 201);
+  // TODO: Use Prisma
+
+  const newAnimal = await prisma.animal.create({
+    data: animalJSON,
+  });
+
+  return c.json(newAnimal, 201);
 });
 
 // DELETE /animals/:id
 app.delete("/animals/:id", (c) => {
   const id = Number(c.req.param("id"));
-  const index = animals.findIndex((animal) => animal.id === id);
 
-  if (index === -1) {
-    return c.json({ message: "Animal not found" }, 404);
-  }
+  // TODO: Use Prisma
 
-  animals.splice(index, 1);
   return c.json({ message: "Animal deleted" });
 });
 
 // PATCH /animals/:id
 app.patch("/animals/:id", async (c) => {
   const id = Number(c.req.param("id"));
-  const animal = animals.find((animal) => animal.id === id);
 
-  if (!animal) {
-    return c.json({ message: "Animal not found" }, 404);
-  }
+  // TODO: Use Prisma
 
-  const updatedData = await c.req.json();
-  animal.name = updatedData.name || animal.name; // Update name if provided
-
-  return c.json(animal);
+  return c.json({ message: "Animal updated" });
 });
 
 export default app;
