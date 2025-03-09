@@ -1,9 +1,0 @@
-<<<<<<< HEAD
-# deps
-node_modules/
-.env
-=======
-node_modules
-# Keep environment variables out of version control
-.env
->>>>>>> 600dac1 (follow the animalia 7)
