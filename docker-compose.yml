@@ -6,3 +6,8 @@ services:
     env_file:
       - path: .env
         required: true
+    volumes:
+      - animalia_database:/var/lib/postgresql/data
+
+volumes:
+  animalia_database:
