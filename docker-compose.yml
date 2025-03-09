@@ -6,7 +6,3 @@ services:
     env_file:
       - path: .env
         required: true
-    environment:
-      POSTGRES_USER: animalia_user
-      POSTGRES_PASSWORD: animalia_password
-      POSTGRES_DB: animalia_database
