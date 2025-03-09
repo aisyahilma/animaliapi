@@ -140,7 +140,23 @@ app.delete("/habitats/:id", async (c) => {
 /* ===========================
    RELATIONSHIP: ANIMAL <-> HABITAT
 =========================== */
-// POST /animals/:animalId/habitats/:habitatId - Assign an animal to a habitat
+// ✅ PATCH /animals/:id
+app.patch("/animals/:animalId", async (c) => {
+  const animalId = c.req.param("animalId");
+  const body = await c.req.json();
+
+  const habitatSlug = body.habitatSlug;
+  const mode = body.mode; // "assign" or "remove"
+
+  // TODO: Continue implementation
+  if (mode === "assign") {
+  } else if (mode === "remove") {
+  } else {
+    return c.json({ error: "Invalid mode. Use 'assign' or 'remove'." }, 400);
+  }
+});
+
+// ❌ POST /animals/:animalId/habitats/:habitatId - Assign an animal to a habitat
 app.post("/animals/:animalId/habitats/:habitatId", async (c) => {
   const animalId = c.req.param("animalId");
   const habitatId = c.req.param("habitatId");
@@ -156,7 +172,7 @@ app.post("/animals/:animalId/habitats/:habitatId", async (c) => {
   }
 });
 
-// DELETE /animals/:animalId/habitats/:habitatId - Remove an animal from a habitat
+// ❌ DELETE /animals/:animalId/habitats/:habitatId - Remove an animal from a habitat
 app.delete("/animals/:animalId/habitats/:habitatId", async (c) => {
   const animalId = c.req.param("animalId");
   const habitatId = c.req.param("habitatId");
