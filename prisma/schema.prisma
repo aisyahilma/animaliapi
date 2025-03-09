@@ -1,0 +1,62 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Animal {
+  id   String  @id @default(ulid())
+  slug String? @unique
+
+  name  String  @db.VarChar(255)
+  color String?
+  age   Int?
+
+  imageUrl String? // jpg, png, gif
+  videoUrl String? // mp4, webm, ogg
+
+  habitats AnimalHabitat[] // ✅ Relasi ke AnimalHabitat
+  foods    Food[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Habitat {
+  id String @id @default(ulid())
+
+  name String
+  size Int
+
+  animals AnimalHabitat[] // ✅ Relasi ke AnimalHabitat
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ✅ Join Table untuk Many-to-Many Relationship
+model AnimalHabitat {
+  animalId  String
+  habitatId String
+
+  animal  Animal  @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  habitat Habitat @relation(fields: [habitatId], references: [id], onDelete: Cascade)
+
+  @@id([animalId, habitatId]) // Composite primary key
+}
+
+model Food {
+  id String @id @default(ulid())
+
+  name String
+
+  animalId String
+  animal   Animal @relation(fields: [animalId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
