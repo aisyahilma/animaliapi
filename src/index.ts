@@ -53,7 +53,7 @@ app.get("/animals/:id", async (c) => {
 // POST /animals - Add a new animal
 app.post("/animals", async (c) => {
   const body = await c.req.json();
-  if (!body.name) return c.json({ error: "Nam are required." }, 400);
+  if (!body.name) return c.json({ error: "Name are required." }, 400);
 
   try {
     const newAnimal = await prisma.animal.create({ data: body });
@@ -78,11 +78,11 @@ app.delete("/animals/:id", async (c) => {
 // PATCH /animals/:id
 app.patch("/animals/:id", async (c) => {
   const id = c.req.param("id");
-  const animalUpdates = await c.req.json();
+  const animalData = await c.req.json();
 
   try {
     // Validate required fields if necessary
-    if (animalUpdates.name === undefined) {
+    if (animalData.name === undefined) {
       return c.json({ error: "At least one of name must be provided." }, 400);
     }
 
@@ -90,7 +90,7 @@ app.patch("/animals/:id", async (c) => {
       where: {
         id,
       },
-      data: animalUpdates,
+      data: animalData,
     });
 
     return c.json(updatedAnimal);
